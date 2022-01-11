@@ -39,12 +39,24 @@ class GildedRoseTest {
     @Test
     public void increaseQuality_should_increase_quality_of_item() {
         Item foo = new Item("foo", 20, 10);
+        Item[] items = new Item[]{foo};
+        GildedRose gildedRose = new GildedRose(items);
+
+        gildedRose.increaseQuality(items[0], 1);
+        assertEquals(11, foo.quality);
+    }
+
+    @Test
+    public void decreaseSellIn_should_increase_sellIn_of_item() {
+        Item foo = new Item("foo", 20, 10);
         Item[] items = new Item[] { foo  };
         GildedRose gildedRose = new GildedRose(items);
 
-        gildedRose.increaseQuality(items[0],1);
-        assertEquals(11, foo.quality);
+        gildedRose.decreaseSellIn(items[0],1);
+        assertEquals(19, foo.sellIn);
     }
+
+
 
     @Test
     public void goldenMaster() throws IOException {
