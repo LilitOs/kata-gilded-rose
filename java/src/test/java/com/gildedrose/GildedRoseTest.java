@@ -24,6 +24,16 @@ class GildedRoseTest {
     }
 
     @Test
+    public void decreaseQuality_should_decrease_quality_of_item() {
+        Item foo = new Item("foo", 20, 10);
+        Item[] items = new Item[] { foo  };
+        GildedRose gildedRose = new GildedRose(items);
+
+        gildedRose.decreaseQuality(items[0],1);
+        assertEquals(9, foo.quality);
+    }
+
+    @Test
     public void goldenMaster() throws IOException {
         Item[] items = new Item[] {
             new Item("+5 Dexterity Vest", 10, 20), //
