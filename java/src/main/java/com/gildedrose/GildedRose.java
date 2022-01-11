@@ -19,50 +19,60 @@ class GildedRose {
         for (int i = 0; i < items.length; i++) {
             itemDailyUpdate(items[i]);
 
-            if (items[i].sellIn < 0) {
-                if (!isAgedBrie(items[i])) {
-                    if (!isBackstagePasses(items[i])) {
-                        if (items[i].quality > MIN_QUALITY) {
-                            if (!isLegendary(items[i])) {
-                                decreaseQuality(items[i], 1);
-                            }
-                        }
-                    } else {
-                        items[i].quality = items[i].quality - items[i].quality;
-                    }
-                } else {
-                    if (items[i].quality < MAX_QUALITY) {
-                        increaseQuality(items[i], 1);
-                    }
-                }
+            if (isExpired(items[i])) {
+                expiredItemDailyUpdate(items[i]);
+            }
+        }
+    }
+
+    private boolean isExpired(Item item) {
+        return item.sellIn < 0;
+    }
+
+    public void expiredItemDailyUpdate(Item item){
+        if (!isAgedBrie(item)) {
+            if (!isBackstagePasses(item)) {
+                itemQualityUpdate(item);
+            } else {
+                item.quality = 0;
+            }
+        } else {
+            if (item.quality < MAX_QUALITY) {
+                increaseQuality(item, 1);
             }
         }
     }
 
     public void itemDailyUpdate(Item item) {
         if (isNormalItem(item)) {
-            normalItemQualityDailyUpdate(item);
+            itemQualityUpdate(item);
         } else {
             if (item.quality < MAX_QUALITY) {
                 increaseQuality(item, 1);
-
                 if (isBackstagePasses(item)) {
-                    if (item.sellIn < 11) {
-                        if (item.quality < 50) {
-                            increaseQuality(item, 1);
-                        }
-                    }
-
-                    if (item.sellIn < 6) {
-                        if (item.quality < 50) {
-                            increaseQuality(item, 1);
-                        }
-                    }
+                    updateQualityForItemSellInLessThan10Days(item);
+                    updateQualityForItemSellInLessThan5Days(item);
                 }
             }
         }
 
         normalItemSellInDailyUpdate(item);
+    }
+
+    private void updateQualityForItemSellInLessThan5Days(Item item) {
+        if (item.sellIn < 6) {
+            if (item.quality < 50) {
+                increaseQuality(item, 1);
+            }
+        }
+    }
+
+    private void updateQualityForItemSellInLessThan10Days(Item item) {
+        if (item.sellIn < 11) {
+            if (item.quality < 50) {
+                increaseQuality(item, 1);
+            }
+        }
     }
 
     private void normalItemSellInDailyUpdate(Item item) {
@@ -71,16 +81,17 @@ class GildedRose {
         }
     }
 
-    private void normalItemQualityDailyUpdate(Item item) {
+    private void itemQualityUpdate(Item item) {
         if (item.quality > MIN_QUALITY) {
-            decreaseQuality(item, 1);
+            if (!isLegendary(item)) {
+                decreaseQuality(item, 1);
+            }
         }
     }
 
     private boolean isNormalItem(Item item) {
         return !isAgedBrie(item)
-            && !isBackstagePasses(item)
-            && !isLegendary(item);
+            && !isBackstagePasses(item);
     }
 
     public void decreaseSellIn(Item item, int i) {
