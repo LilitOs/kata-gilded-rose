@@ -17,43 +17,14 @@ class GildedRose {
 
     public void updateQuality() {
         for (int i = 0; i < items.length; i++) {
-            if (!isAgedBrie(items[i])
-                    && !isBackstagePasses(items[i])) {
-                if (items[i].quality > MIN_QUALITY) {
-                    if (!isLegendary(items[i])) {
-                        decreaseQuality(items[i],1);
-                    }
-                }
-            } else {
-                if (items[i].quality < MAX_QUALITY) {
-                    increaseQuality(items[i], 1);
-
-                    if (isBackstagePasses(items[i])) {
-                        if (items[i].sellIn < 11) {
-                            if (items[i].quality < 50) {
-                                increaseQuality(items[i], 1);
-                            }
-                        }
-
-                        if (items[i].sellIn < 6) {
-                            if (items[i].quality < 50) {
-                                increaseQuality(items[i], 1);
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!isLegendary(items[i])) {
-                decreaseSellIn(items[i], 1);
-            }
+            itemDailyUpdate(items[i]);
 
             if (items[i].sellIn < 0) {
                 if (!isAgedBrie(items[i])) {
                     if (!isBackstagePasses(items[i])) {
                         if (items[i].quality > MIN_QUALITY) {
                             if (!isLegendary(items[i])) {
-                                decreaseQuality(items[i],1);
+                                decreaseQuality(items[i], 1);
                             }
                         }
                     } else {
@@ -68,7 +39,51 @@ class GildedRose {
         }
     }
 
-    public void decreaseSellIn(Item item, int i){
+    public void itemDailyUpdate(Item item) {
+        if (isNormalItem(item)) {
+            normalItemQualityDailyUpdate(item);
+        } else {
+            if (item.quality < MAX_QUALITY) {
+                increaseQuality(item, 1);
+
+                if (isBackstagePasses(item)) {
+                    if (item.sellIn < 11) {
+                        if (item.quality < 50) {
+                            increaseQuality(item, 1);
+                        }
+                    }
+
+                    if (item.sellIn < 6) {
+                        if (item.quality < 50) {
+                            increaseQuality(item, 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        normalItemSellInDailyUpdate(item);
+    }
+
+    private void normalItemSellInDailyUpdate(Item item) {
+        if (!isLegendary(item)) {
+            decreaseSellIn(item, 1);
+        }
+    }
+
+    private void normalItemQualityDailyUpdate(Item item) {
+        if (item.quality > MIN_QUALITY) {
+            decreaseQuality(item, 1);
+        }
+    }
+
+    private boolean isNormalItem(Item item) {
+        return !isAgedBrie(item)
+            && !isBackstagePasses(item)
+            && !isLegendary(item);
+    }
+
+    public void decreaseSellIn(Item item, int i) {
         item.sellIn -= i;
     }
 
@@ -76,7 +91,7 @@ class GildedRose {
         item.quality = item.quality - i;
     }
 
-    public void increaseQuality(Item item, int i){
+    public void increaseQuality(Item item, int i) {
         item.quality = item.quality + i;
     }
 
@@ -84,11 +99,11 @@ class GildedRose {
         return item.name.equals("Aged Brie");
     }
 
-    public boolean isLegendary(Item item){
+    public boolean isLegendary(Item item) {
         return item.name.equals("Sulfuras, Hand of Ragnaros");
     }
 
-    public boolean isBackstagePasses(Item item){
+    public boolean isBackstagePasses(Item item) {
         return item.name.equals("Backstage passes to a TAFKAL80ETC concert");
     }
 
