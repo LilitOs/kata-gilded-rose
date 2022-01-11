@@ -23,14 +23,27 @@ class GildedRoseTest {
         assertEquals(9, foo.quality);
     }
 
+
     @Test
-    public void decreaseQuality_should_decrease_quality_of_item() {
+    public void decreaseQuality_should_decrease_quality_of_normal_item() {
         Item foo = new Item("foo", 20, 10);
         Item[] items = new Item[] { foo  };
         GildedRose gildedRose = new GildedRose(items);
 
-        gildedRose.decreaseQuality(items[0],1);
+        gildedRose.updateQuality();
+
+        assertEquals(19,foo.sellIn);
         assertEquals(9, foo.quality);
+    }
+
+    @Test
+    public void increaseQuality_should_increase_quality_of_item() {
+        Item foo = new Item("foo", 20, 10);
+        Item[] items = new Item[] { foo  };
+        GildedRose gildedRose = new GildedRose(items);
+
+        gildedRose.increaseQuality(items[0],1);
+        assertEquals(11, foo.quality);
     }
 
     @Test

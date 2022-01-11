@@ -18,23 +18,23 @@ class GildedRose {
                     && !items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
                 if (items[i].quality > 0) {
                     if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                        decreaseQuality(items[i],i);
+                        decreasQuality(items[i],i);
                     }
                 }
             } else {
                 if (items[i].quality < 50) {
-                    items[i].quality = items[i].quality + 1;
+                    increaseQuality(items[i], 1);
 
                     if (items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
                         if (items[i].sellIn < 11) {
                             if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
+                                increaseQuality(items[i], 1);
                             }
                         }
 
                         if (items[i].sellIn < 6) {
                             if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
+                                increaseQuality(items[i], 1);
                             }
                         }
                     }
@@ -50,7 +50,7 @@ class GildedRose {
                     if (!items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
                         if (items[i].quality > 0) {
                             if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                                decreaseQuality(items[i],1);
+                                decreasQuality(items[i],1);
                             }
                         }
                     } else {
@@ -58,14 +58,18 @@ class GildedRose {
                     }
                 } else {
                     if (items[i].quality < 50) {
-                        items[i].quality = items[i].quality + 1;
+                        increaseQuality(items[i], 1);
                     }
                 }
             }
         }
     }
 
-    public void decreaseQuality(Item item, int i) {
+    public void decreasQuality(Item item, int i) {
         item.quality = item.quality - 1;
+    }
+
+    public void increaseQuality(Item item, int i){
+        item.quality = item.quality + i;
     }
 }
