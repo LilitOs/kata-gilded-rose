@@ -56,8 +56,6 @@ class GildedRoseTest {
         assertEquals(19, foo.sellIn);
     }
 
-
-
     @Test
     public void goldenMaster() throws IOException {
         Item[] items = new Item[] {
